@@ -57,6 +57,19 @@ I suggest the python3 binary to avoid ambiguity. If you still preffer call
 > sudo ln -s /usr/bin/python3 /usr/bin/python
 > ```
 
+By default it list files on the current user's *HOME* folder. To open another
+folder, use the *-d* option (or the long option *--directory*):
+
+```
+python3 launcher.py -d /home/user/Documents
+```
+
+You can use environment variables too:
+
+```
+python3 launcher.py --directory $HOME/Images
+```
+
 ## How to use this example Python script using Git
 
 Comming soon
