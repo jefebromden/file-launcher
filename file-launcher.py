@@ -7,9 +7,12 @@ import platform,os,tempfile
 import subprocess,argparse
 
 import pandas
+from rich.console import Console
+from rich.table import Table
 
 PLATFORM = platform.uname().system
 HOME= os.path.expanduser('~')
+TABLE_TITLE = "Wendy's Files"
 
 def parse_arguments():
     """Command line arguments parser."""
@@ -53,11 +56,11 @@ def openFile(path):
     else:
         print(f'{path} is not a file')
 
-def defaultMethod(listing,selected):
+def defaultMethodOld(listing,selected):
     path = listing.iloc[selected]['Path']
     openFile(path)
 
-def listOptions(directory=None):
+def listOptionsOld(directory=None):
     listing = []
     columns = ['Name','Path']
     if not directory:
@@ -74,6 +77,43 @@ def listOptions(directory=None):
 
     return listing,columns
 
+def defaultMethod(listing,selected):
+    path = listing[selected][1]
+    openFile(path)
+
+def listOptions(directory=None):
+    listing = []
+    columns = {
+        'Name': 'cyan',
+        'Path': 'magenta'
+    }
+    if not directory:
+        directory = HOME
+
+    if os.path.isdir(directory):
+        directory = os.path.abspath(directory)
+        for item in os.listdir(directory):
+            path = os.path.join(directory,item)
+            if os.path.isfile(path):
+                # Don't list hidden files
+                if item[0] != '.':
+                    listing.append((item,path))
+
+    return listing,columns
+
+def createTable(header,rows,title=TABLE_TITLE):
+    table = Table(title=title)
+    table.add_column('Index',style='green')
+    for name,color in header.items():
+        table.add_column(name,style=color)
+
+    index = 0
+    for item in rows:
+        table.add_row(str(index),item[0],item[1])
+        index += 1
+
+    return table
+
 def main():
     args       = parse_arguments()
     directory  = args.d
@@ -82,16 +122,20 @@ def main():
 
     while True:
         listing,columns = listOptions(directory)
-        listing         = pandas.DataFrame(
-                            listing,
-                            columns=columns)
-        print(listing)
+        #listing         = pandas.DataFrame(
+        #                    listing,
+        #                    columns=columns)
+        #print(listing)
+        table = createTable(columns,listing)
+        console = Console()
+        console.print(table)
         print()
         selected        = input(inputMsg.format(eo=exitOption))
 
         try:
             selected = int(selected)
-            if selected in listing.index.to_list():
+            # if selected in listing.index.to_list():
+            if selected < len(listing):
                 defaultMethod(listing,selected)
             else:
                 invalidOption(selected)
