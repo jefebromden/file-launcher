@@ -40,13 +40,13 @@ download the file *launcher.py* to your computer.
 Then, you have to make it executable:
 
 ```
-chmod -v +x launcher.py
+chmod -v +x file-launcher.py
 ```
 
 Finnally, you can run it:
 
 ```
-python3 launcher.py
+python3 file-launcher.py
 ```
 
 > On some systems, *python* may still refer to Python 2 instead of Python 3.
@@ -61,13 +61,13 @@ By default it list files on the current user's *HOME* folder. To open another
 folder, use the *-d* option (or the long option *--directory*):
 
 ```
-python3 launcher.py -d /home/user/Documents
+python3 file-launcher.py -d /home/user/Documents
 ```
 
 You can use environment variables too:
 
 ```
-python3 launcher.py --directory $HOME/Images
+python3 file-launcher.py --directory $HOME/Images
 ```
 
 ## How to use this example Python script using Git
