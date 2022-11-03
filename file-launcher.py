@@ -1,4 +1,4 @@
-#!/usr/bin/env python3 -X pycache_prefix='mycachefolder'
+#!/usr/bin/env python3 -X pycache_prefix='__no_problem_if_you_delete_me_jeff__'
 # File name: launcher.py
 # Description: Simple script to list files on a folder and run the selected file in its default application.
 # Author: Agustin Ayala
