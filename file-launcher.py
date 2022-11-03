@@ -1,13 +1,14 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3 -X pycache_prefix='mycachefolder'
 # File name: launcher.py
 # Description: Simple script to list files on a folder and run the selected file in its default application.
 # Author: Agustin Ayala
 # Date: 01-11-2022
-
-import os,subprocess,argparse
+import platform,os,tempfile
+import subprocess,argparse
 
 import pandas
 
+PLATFORM = platform.uname().system
 HOME= os.path.expanduser('~')
 
 def parse_arguments():
@@ -38,9 +39,19 @@ def invalidOption(option,msg=None):
     print()
 
 def openFile(path):
+    if PLATFORM == 'Linux':
+        command = 'xdg-open "{path}"'
+    elif PLATFORM == 'Windows':
+        command = 'start "" "{path}"'
+    else:
+        print(f'{PLATFORM} platform is not supported.')
+        raise SystemExit()
+
     if os.path.isfile(path):
-        xdgOpen = f'xdg-open "{path}"'
-        subprocess.call(xdgOpen,shell=True)
+        open_file = command.format(path=path)
+        subprocess.call(open_file,shell=True)
+    else:
+        print(f'{path} is not a file')
 
 def defaultMethod(listing,selected):
     path = listing.iloc[selected]['Path']
@@ -91,4 +102,8 @@ def main():
                 invalidOption(selected,msg='{op} is not an integer.')
 
 if __name__ == '__main__':
-    main()
+    if PLATFORM in ['Linux','Windows']:
+        main()
+    else:
+        print(f'{PLATFORM} platform is not supported.')
+        raise SystemExit()
